@@ -4,7 +4,7 @@
     PHP Metamorphic Mutation Engine Tester
     ----------------------------------------------------------
     
-    This scripts makes an infinite loop generating different
+    This scripts does an infinite loop generating different
     mutations of 'example_file.php'
     
     Runs each mutation to check if it runs fine and checks
@@ -41,14 +41,14 @@
         system("php ./mutation_chamber/mutation.php > ./mutation_chamber/mutation.txt");
         $output=implode('',file('./mutation_chamber/mutation.txt'));
         
-        // If original ouput not equal to new output, show an error message
+        // If original ouput is not equal to new output then show an error message
         // and exit.
         if( $original != $output ){
             echo "[EPIC FAIL!] !!\n";
             exit;
         }
         
-        // Else, continue
+        // if equal then continue
         echo "[ok]\n";
         
     }
