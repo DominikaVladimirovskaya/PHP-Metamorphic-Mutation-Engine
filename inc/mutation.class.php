@@ -17,7 +17,7 @@ class Mutation{
 	var $php;
 	var $mutation_flags;
 
-	// Constructor	
+	/* Constructor */	
 	function Mutation(){
    
 		// Php parser status init
@@ -41,36 +41,74 @@ class Mutation{
 		
 
 	}
-	
-	// Sets the code to mutate
+
+	/*-----------------------------------------------------
+	| function setCode($code)
+	|
+	| Set the code to be mutated
+	------------------------------------------------------*/
 	function setCode( $code ){
 		$this->code=$code;
 	}
 	
-	// Return the mutated code
+	/*-----------------------------------------------------
+	| function getCode($code)
+	|
+	| Returns the mutated code
+	------------------------------------------------------*/
 	function getCode(){
 		return $this->code;	
 	}
 
-	// Sets the internal cursor position
+	/*-----------------------------------------------------
+	| function setCursor(cursor position)
+	|
+	| Set's the parser internal cursor position
+	------------------------------------------------------*/
 	function cursorSetPosition($pos){
 		$this->cursor=$pos;
 	}
 	
-	// FUNCTION setFrecuency
-	// Set flags frecuency, -1=never, 1001=always
-	// Ex:
-	// $mutation->setFrecuency('MODIFY_QUOTED',500)
-	// Result:
-	// 50% of CHARACTERS in quoted strings will be changed
+	
+	/*-----------------------------------------------------
+	| Function setFrecuency($flag,$frecuency)
+	|
+	| Set flags frecuency: -1=never, 1001=always
+	| Ex:
+	| $mutation->setFrecuency('MODIFY_QUOTED',500)
+	| Result:
+	| 50% of CHARACTERS in quoted strings will be changed
+	------------------------------------------------------*/
 	
 	function setFrecuency($flag, $value){
-		$accepted_flags=array('MODIFY_VARS','MODIFY_QUOTED_STRINGS','MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS');
+		$accepted_flags=array('MODIFY_VARS','MODIFY_QUOTED_STRINGS',
+		'MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS');
+		
+		// Valid flag check
+		if( !in_array($flag,$accepted_flags)){
+			echo "Function setFrecuency, Fatal error: Unknown flag: '$flag'\n";
+			echo "Exitting...\n";
+			exit();			
+		}
+		
+		// Valid value check
+		if( $value != ceil($value) || $value<(-1) || $value>1001 ){
+			echo "Function setFrecuency, Fatal error: '$value' is not a valid value\n";
+			echo "Exitting...\n";
+			exit();			
+		}
+		
+		// Set it
+		$this->flags[$flag] = $value;
+		
 	}
 	
-	
-	// Reads back from (current cursor positon-1) or $position
-	// Stops when reading $stop_character
+	/*-----------------------------------------------------
+	| Function readBackToCharacter($stop_character,[$position])
+	| 
+	| Reads back from (current cursor positon-1) or $position
+	| Stops when reading $stop_character
+	------------------------------------------------------*/	
 	function readBackToCharacter($stop_character,$position=false){
 		
 		// If no start position, use latest cursor position
@@ -85,29 +123,42 @@ class Mutation{
 		return $string;
 	}
 	
-	// Modify a number with an equivalent calc
-	// Example: numberModify(100)
-	// Returns: (35+40+90-10)
+	
+	/*-----------------------------------------------------
+	| Function numberModify($number)
+	| 
+	| Modify a number with an equivalent calc
+	| Example: numberModify(100)
+	| Returns: (35+40+90-10)
+	------------------------------------------------------*/	
 	
 	function numberModify($number){
 		
-		$num_calcs=rand(1,4);
-		$total=rand(0,1366613);
+		$num_calcs=rand(1,4);		// Random number of calculations
+		$total=rand(0,1366613);		// Starting number
 		$out=$total;
 		
+		// Loop start
 		for( $aux=0; $aux<$num_calcs; $aux++ ){
 			
-			$random_number=rand(0,65535);
+			$random_number=rand(0,65535);	// get a random number
 			
+			// 3 posible calculations
 			switch(rand(1,3)){
-				case 1:
+				
+				// Add
+				case 1:				
 					$out.='+'.$random_number;
 					$total=$total+$random_number;
 				break;
-				case 2:
+				
+				// Substract
+				case 2:				
 					$out.='-'.$random_number;
 					$total=$total-$random_number;
 				break;
+				
+				// Multiply
 				case 3:
 					$random_number=rand(1,30);
 					$out='('.$out.')*'.$random_number;
@@ -117,6 +168,7 @@ class Mutation{
 			
 		}
 		
+		// Adjust the resulting number
 		if( $total>$number ){
 			return $out.'-'.($total-$number);
 		}elseif( $total<$number ){
@@ -127,8 +179,12 @@ class Mutation{
 	
 	}
 	
-	
-	// Generate a Random String.
+	/*-----------------------------------------------------
+	| Function generateRandomString($min_length,$max_length)
+	|
+	| Generate a Random String with a random number of
+	| characters between $min_length and $max_length
+	------------------------------------------------------*/		
 	function randomString($min_length,$max_length){
 		
 		$characters='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -142,16 +198,22 @@ class Mutation{
 		return $string;
 		
 	}
+
+
+	/*-----------------------------------------------------
+	| function getNewVarName
+	|
+	| Generate a new random varname or return
+	| a previously generated varname
+	|
+	| $this->getNewVarName('hello')  Returns "UmndsYhw"
+	| $this->getNewVarName('bye')	Returns "wkHoPw"
+	|
+	| $this->getNewVarName('start')  Returns "ulasnqhwe"
+	| $this->getNewVarName('start')  Returns "ulasnqhwe" too
+	|
+	------------------------------------------------------*/	
 	
-	// Generate a new random varname or return
-	// a previously generated
-	//
-	// $this->getNewVarName('hello')  Returns "UmndsYhw"
-	// $this->getNewVarName('bye')	Returns "wkHoPw"
-	//
-	// $this->getNewVarName('start')  Returns "ulasnqhwe"
-	// $this->getNewVarName('start')  Returns "ulasnqhwe"
-	//
 	function getNewVarName($varname){
 		if( $this->varnames[$varname] ){
 			return $this->varnames[$varname];
@@ -162,19 +224,23 @@ class Mutation{
 		}
 	}
 	
-	// InsertString
+	/*-----------------------------------------------------
+	| function inserString($string)
+	|
+	| Inserts a string in current cursor position 
+	------------------------------------------------------*/	
 	function insertString($str){
 		$this->backReplace('',$str);
-		/*$current_cursor=$this->cursor;
-		$left=substr($this->code, 0 , $this->cursor-(strlen($search))); 
-		$right=substr($this->code, $this->cursor);
-		$this->code=$left.$replace.$right;
-		$this->cursor=$this->cursor+(strlen($replace)-strlen($search));
-		*/
-	}	
+	}
 	
 	
-	// Back word replace
+	/*-----------------------------------------------------
+	| function backwordReplace($string,$new_string)
+	|
+	| Looks for the woerd '$string' inmediatly after current
+	| cursor, changes it, and readjusts the cursor to the
+	| new position.
+	------------------------------------------------------*/	
 	function backReplace( $search, $replace ){
 		$current_cursor=$this->cursor;
 		$left=substr($this->code, 0 , $this->cursor-(strlen($search))); 
@@ -183,13 +249,15 @@ class Mutation{
 		$this->cursor=$this->cursor+(strlen($replace)-strlen($search));
 	}
 	
-	//**********************************************
-	//  Read the character at current position
-	//  ProcessIt an refresh the status
-	//**********************************************
-	
+	/*-----------------------------------------------------
+	| function cursorRead()
+	|
+	| Read the character at current position
+	| ProcessIt an refresh the status
+	------------------------------------------------------*/	
 	function cursorRead(){
 		
+		// If cursor at end of code, return false
 		if ( $this->cursor >= strlen($this->code) ){ return false; }
 		
 		// Load next character
@@ -217,7 +285,7 @@ class Mutation{
 			$is_number= false;
 		}
 
-		// Check if slashed
+		// Check if current char is slashed
 		if( $this->lastChars(1) == '\\' && $this->lastChars(2) != '\\'.'\\' ){
 			$this->status['slashed'] = true;
 		}else{
@@ -229,25 +297,28 @@ class Mutation{
 			$this->status['in_php'] = true;
 		}
 
-		// Check for PHP end
+		// And Check for PHP ending
 		if( $separation_character && $this->lastChars(2) == '?>' ){
 			$this->status['in_php'] = false;
 		}
 
-		// IN PHP CODE CONDITIONS
+		// This block is executed only if cursor is
+		// inside PHP code
 		if( $this->status['in_php'] == true  ){
   
 			// CONDITIONS IF NOT SLASHED CHAR
+			// This block executed only if the character
+			// at cursor position is NOT \slashed
 			if( !$this->status['slashed']  ){
 
-				// Quotes check '
+				// Check if cursor position is 'quoted'
 				if ( $this->status['character'] == "'" && $this->status['in_quotes'] == false ){
 					$this->status['in_quotes'] = true;
 				}elseif(  $this->status['character'] == "'" && $this->status['in_quotes'] == true  ){
 					$this->status['in_quotes'] = false;
 				}
 
-				// Double quotes check "
+				// Check if cursor position is "double quoted"
 				if ( $this->status['character'] == '"' && $this->status['in_double_quotes'] == false ){
 					$this->status['in_double_quotes'] = true;
 				}elseif(  $this->status['character'] == '"' && $this->status['in_double_quotes'] == true  ){
@@ -255,6 +326,7 @@ class Mutation{
 				}
 
 				// Detect one-line comments
+				// like this one :)
 				if ( $this->status['character'] == '/' && $this->lastChars(1) == '/' && !$this->status['in_comment'] ){
 					$this->status['in_comment_line'] = true;
 				}
@@ -262,7 +334,7 @@ class Mutation{
 					$this->status['in_comment_line'] = false;
 				}
 				
-				// Detect multi-line comments
+				// Detect multi-line comments, comments /* like this */
 				if ( $this->status['character'] == '*' && $this->lastChars(1) == '/' ){
 					$this->status['in_comment'] = true;
 				}
@@ -270,11 +342,11 @@ class Mutation{
 					$this->status['in_comment'] = false;
 				}
 				
-				// Detect vars start
+				// Detect vars start, variables starts with a dollar
 				if( $this->status['character'] == '$' && !$this->status['in_quotes'] ){
 					$this->status['in_var'] = true;
 					
-				// Detect vars ending
+				// Detect vars ending, variables ends with a separation character
 				}elseif( $this->status['in_var'] && $word_separator ){
 					
 					$this->status['in_var'] = false;
@@ -292,7 +364,7 @@ class Mutation{
 					}
 				}
 
-				// Detect Numbers 
+				// Detect if cursor is in a number, like 666
 				if( !$this->status['in_quotes'] && !$this->status['in_double_quotes'] ){
 					
 					if( $is_number && !$this->status['in_number'] ){
@@ -303,16 +375,21 @@ class Mutation{
 						$this->status['number'].=$this->status['character'];
 					}elseif(!$is_number && $this->status['in_number']){
 						
-						  //  echo "Number detected:".$this->status['number']."<br>";
-						  //  echo "Transformed to: ".$this->numberModify($this->status['number'])."<br><br>";
-							$this->backReplace($this->status['number'],$this->numberModify($this->status['number']));
-							$this->status['number']='';
-							$this->status['in_number'] = false;
+						// Posible Mutation HERE !! !!! !!
+						// Number conversion!
+						$this->backReplace($this->status['number'],$this->numberModify($this->status['number']));
+						$this->status['number']='';
+						$this->status['in_number'] = false;
 					}
 				}
 
-				// Modify simple quoted strings '
+				// Modify simple quoted strings 'like this one'
+				
 				if( $this->status[in_quotes] &&  $this->status[character] != "'" ){
+			
+					// Posible Mutation HERE !! !!! !!!
+					// 'quoted' literals conversion!
+
 					if( rand(0,6) == 0 ){ $nl="\n"; }else{ $nl=''; }
 					switch(rand(0,1)){
 						case 0:
@@ -330,13 +407,12 @@ class Mutation{
 
 		}
 
+		// refresh status, and move cursor
 		$this->status['cursor'] = $this->cursor;
 		$this->cursor=$this->cursor+1;
 		return true;
-
+		
 	}
-
-
 
 	// Return the 'num' last characters
 	function lastChars( $num ){
@@ -349,117 +425,12 @@ class Mutation{
 		return (substr($this->code,$start,$end));
 	}
 	
-
 	function mutate(){
 		while ( $this->cursorRead() ){
 			$n++;
 		}
 		return $n;
 	}
-	
-  // Debug parse
-	function debugParse(){
-		
-		// Go to code start
-		$this->cursorSetPosition(0);
-		
-		// Dump HTML
-		echo "<html><style>
-		body { background-color: #444444; color: #FFFFFF; }
-		table{ font-size:11px; width:100% }
-		.letter{ width: 15px; height:15px; font-size:11px; display:inline; color:black;
-		float:left; border:1px solid #AAAAAA; text-align: center; cursor:hand;cursor:pointer;
-		background-color: white;
-		}
-		.info{ border:2px solid #444444; background-color: yellow; color:black; position:absolute; }
-		</style>
-		<script>
-		function showInfo(num){
-			document.getElementById('info_'+num).style.display='';
-			document.getElementById('info_'+num).style.top=mouseY+'px';
-			document.getElementById('info_'+num).style.left=mouseX+'px';
-		}
-		function hideInfo(num){
-			document.getElementById('info_'+num).style.display='none';
-		}
-		
-		
-	
-		// Detect if the browser is IE or not.
-		// If it is not IE, we assume that the browser is NS.
-		var IE = document.all?true:false
-		
-		// If NS -- that is, !IE -- then set up for mouse capture
-		if (!IE) document.captureEvents(Event.MOUSEMOVE)
-		
-		// Set-up to use getMouseXY function onMouseMove
-		document.onmousemove = getMouseXY;
-		
-		// Temporary variables to hold mouse x-y pos.s
-		var tempX = 0
-		var tempY = 0
-		var mouseX=0
-		var mousey=0
-		// Main function to retrieve mouse x-y pos.s
-		
-		function getMouseXY(e) {
-		  if (IE) { // grab the x-y pos.s if browser is IE
-			tempX = event.clientX + document.body.scrollLeft
-			tempY = event.clientY + document.body.scrollTop
-		  } else {  // grab the x-y pos.s if browser is NS
-			tempX = e.pageX
-			tempY = e.pageY
-		  }  
-		  // catch possible negative values in NS4
-		  if (tempX < 0){tempX = 0}
-		  if (tempY < 0){tempY = 0}  
-		  // show the position values in the form named Show
-		  // in the text fields named MouseX and MouseY
-		  mouseX = tempX
-		  mouseY = tempY
-		  return true
-		}
-		
-		</script><body>
-		<div style='border:1px solid white;margin-bottom:20px;background-color:#660000;padding:5px;'><div style='margin:10px; text-align:center; font-weight:bold; color:white;'>Php Polymorphic Mutation Engine :: By Dominika Vladimirovskaya :: Debug Info</div></div>
-		";
-
-		$counter='0';
-
-		// Parse code
-		while ( $this->cursorRead() ){
-
-			$counter++;
-
-			if( $this->status['character'] == "\n" ){
-			   $c="<b>N</b>";
-				$color='green';
-			}else if( $this->status['character'] == "\t" ){
-				$c="<b>T</b>";
-				$color='green';
-			}else{
-				$c=htmlspecialchars($this->status['character']);
-				$color='white';
-			}
-		
-			$left.="<span class='letter' style='background-color:$color' onmouseover='showInfo($counter)' onmouseout='hideInfo($counter)'>$c</span>";
-			$right.="<div id='info_$counter' style='display:none' class='info'><pre>".print_r($this->status,true).'</pre></div>';
-			$chars_status[$c] = $this->status;
-		
-			if( $this->status['character'] == "\n" ){ $left.="<br><br>"; }
-		}
-		
-		echo "<table width='100%'><tr><td valign='top'>$left</td><td valign='top'>$right";
-		echo "</td></tr></table>";
-	
-	}	
-	
-	
-	
-	
-	
-	
-	
 	
 }
 
@@ -468,12 +439,10 @@ class Mutation{
 **************************************************************/
 
 function d( $nast ){
-	
 	echo "<pre style='border:1px solid red;background-color: #EEEEEE;color:black;'>";
 	$out = print_r($nast,true);
 	echo htmlentities($out);
 	echo "</pre>";
-	
 }
 
 function microtime_float()
@@ -481,5 +450,6 @@ function microtime_float()
 	list($usec, $sec) = explode(" ", microtime());
 	return ((float)$usec + (float)$sec);
 }
+
 
 ?>
