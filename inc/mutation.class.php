@@ -5,7 +5,7 @@
 	
 	By Dominika Vladimirovskaya
 	dominika.vladimirov(At)comentalo.net
-	October, 2009, Barcelona
+	October // 2009 // Soviet Union
 	
 **************************************************************/
 
@@ -34,15 +34,11 @@ class Mutation{
 		$this->status['character']			= '';
 	
 		// Php parser configuration
-		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ',
-												'*','/','-','+','%','&','=',
-												'{','}','-','\\','<','>',';');
+		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ','*','/','-','+','%','&','=','{','}','-','\\','<','>',';');
 		
-		$this->php['reserved_vars'] 	= array('this','_get','vars','_post',
-									'_request','cookies','server','globals');
+		// Php related stuff
+		$this->php['reserved_vars']	= array('this','_get','vars','_post','_request','cookies','server','globals');
 		
-		// Mutation flags Random Initalization
-		$this->mutation_flags['MODIFY_VARS']	=   rand(-1,1000);
 
 	}
 	
@@ -60,6 +56,18 @@ class Mutation{
 	function cursorSetPosition($pos){
 		$this->cursor=$pos;
 	}
+	
+	// FUNCTION setFrecuency
+	// Set flags frecuency, -1=never, 1001=always
+	// Ex:
+	// $mutation->setFrecuency('MODIFY_QUOTED',500)
+	// Result:
+	// 50% of CHARACTERS in quoted strings will be changed
+	
+	function setFrecuency($flag, $value){
+		$accepted_flags=array('MODIFY_VARS','MODIFY_QUOTED_STRINGS','MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS');
+	}
+	
 	
 	// Reads back from (current cursor positon-1) or $position
 	// Stops when reading $stop_character
@@ -341,17 +349,7 @@ class Mutation{
 		return (substr($this->code,$start,$end));
 	}
 	
-	// Enable or disable a mutation feature
-	function setFlag( $flag, $status ){
-		if( key_exists($flag,$this->mutation_flags)){
-			$this->mutation_flags[$flag]	=   $status;
-		}else{
-			echo "Unexising flag '$flag'.";
-			echo "Allowed flags:".implode(', ',array_keys($this->mutation_flags));
-			exit();
-		}
-	}
-	
+
 	function mutate(){
 		while ( $this->cursorRead() ){
 			$n++;
@@ -466,14 +464,7 @@ class Mutation{
 }
 
 /*************************************************************
-
 	PHP Mutation Engine
-
-	Dominika Vladimirovskaya
-	  dominika[oO]comentalo.net
-	
-	October, 2009, Soviet Union
-	
 **************************************************************/
 
 function d( $nast ){
