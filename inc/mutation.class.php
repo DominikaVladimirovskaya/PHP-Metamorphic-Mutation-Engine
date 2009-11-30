@@ -184,7 +184,7 @@ class Mutation{
 	|
 	| Generate a Random String with a random number of
 	| characters between $min_length and $max_length
-	------------------------------------------------------*/		
+	------------------------------------------------------*/		ś
 	function randomString($min_length,$max_length){
 		
 		$characters='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -198,8 +198,7 @@ class Mutation{
 		return $string;
 		
 	}
-
-
++´´´´´´´´´´´´´´´´´´´´´´´´´
 	/*-----------------------------------------------------
 	| function getNewVarName
 	|
@@ -400,11 +399,7 @@ class Mutation{
 						break;
 					}
 				}
-				
-				
-
 			}
-
 		}
 
 		// refresh status, and move cursor

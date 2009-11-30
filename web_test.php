@@ -23,16 +23,17 @@
 
 	// Count time spend in mutation	
 	$time_start = microtime(true);
+	
 	$mutation->mutate();
+	
+	
 	$time_end = microtime(true);
 	$time = $time_end - $time_start;
 	
 	
 	// Highlight and Show code
 	highlight_string($mutation->getCode());
-	
 	echo "Mutation in $time seconds\n";
-	
 	exit();
 
 ?>
