@@ -34,7 +34,7 @@ class Mutation{
 		$this->status['character']			= '';
 	
 		// Php parser configuration
-		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ','*','/','-','+','%','&','=','{','}','-','\\','<','>',';');
+		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ','*','/','-','+','%','&','=','{','}','-','\\','<','>',';','.');
 		
 		// Php related stuff
 		$this->php['reserved_vars']	= array('this','_get','vars','_post','_request','cookies','server','globals');
@@ -247,7 +247,11 @@ class Mutation{
 		if( $this->varnames[$varname] ){
 			return $this->varnames[$varname];
 		}else{
-			$new_varname=$this->randomString(4,10);
+			if( $this->frecuencyCheck('MODIFY_VARS') ){
+				$new_varname=$this->randomString(4,10);
+			}else{
+				$new_varname=$varname;
+			}
 			$this->varnames[$varname] = $new_varname;
 			return $new_varname;
 		}
@@ -380,17 +384,19 @@ class Mutation{
 					
 					$this->status['in_var'] = false;
 					
-					if ( $this->mutation_flags['MODIFY_VARS'] == true ){
-						// Variable detected, capture its name
-						$varname=$this->readBackToCharacter('$');
 						
-						// Get a random new name for this variable
-						$new_varname = $this->getNewVarName($varname);
-						
-						// Replace the variable
-						$this->backReplace($varname,$new_varname);
-						
-					}
+					// Variable detected, capture its name
+					$varname=$this->readBackToCharacter('$');
+
+					/*
+					| Posible Mutation HERE !! !!! !!
+					| Vars conversion!
+					*/					
+					// Get a random new name for this variable
+					$new_varname = $this->getNewVarName($varname); // <- frecuency implemented here
+					
+					// Replace the variable
+					$this->backReplace($varname,$new_varname);
 				}
 
 				// Detect if cursor is in a number, like 666
@@ -404,8 +410,10 @@ class Mutation{
 						$this->status['number'].=$this->status['character'];
 					}elseif(!$is_number && $this->status['in_number']){
 						
-						/* Posible Mutation HERE !! !!! !!
-						   Number conversion! */
+						/*
+						| Posible Mutation HERE !! !!! !!
+						| Number conversion!
+						*/
 						   
 						if( $this->frecuencyCheck('MODIFY_NUMBERS') ){
 							$this->backReplace($this->status['number'],$this->numberModify($this->status['number']));
@@ -420,8 +428,10 @@ class Mutation{
 				
 				if( $this->status[in_quotes] &&  $this->status[character] != "'" ){
 			
-					/* Posible Mutation HERE !! !!! !!!
-				 	'quoted' literals conversion! 			*/
+					/*
+					| Posible Mutation HERE !! !!! !!!
+				 	| 'quoted' literals conversion!
+				 	*/
 
 					if( $this->frecuencyCheck('MODIFY_QUOTED_STRINGS') ){
 						if( rand(0,6) == 0 ){ $nl="\n"; }else{ $nl=''; }
