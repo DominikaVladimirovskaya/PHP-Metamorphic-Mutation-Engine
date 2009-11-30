@@ -38,7 +38,6 @@ class Mutation{
 		
 		// Php related stuff
 		$this->php['reserved_vars']	= array('this','_get','vars','_post','_request','cookies','server','globals');
-		
 
 	}
 
@@ -422,17 +421,20 @@ class Mutation{
 				if( $this->status[in_quotes] &&  $this->status[character] != "'" ){
 			
 					/* Posible Mutation HERE !! !!! !!!
-				 	  'quoted' literals conversion! 			*/
+				 	'quoted' literals conversion! 			*/
 
-					if( rand(0,6) == 0 ){ $nl="\n"; }else{ $nl=''; }
-					switch(rand(0,1)){
-						case 0:
-							$this->insertString("'.$nl'");
-						break;
-						case 1:
-							$this->insertString("'.$".$this->randomString(4,9).".".$nl."'");
-						break;
+					if( $this->frecuencyCheck('MODIFY_QUOTED_STRINGS') ){
+						if( rand(0,6) == 0 ){ $nl="\n"; }else{ $nl=''; }
+						switch(rand(0,1)){
+							case 0:
+								$this->insertString("'.$nl'");
+							break;
+							case 1:
+								$this->insertString("'.$".$this->randomString(4,9).".".$nl."'");
+							break;
+						}
 					}
+					
 				}
 			}
 		}

@@ -22,8 +22,8 @@
 
 
 	// Flags
-	$mutation->setFrecuency('MODIFY_NUMBERS',"500");	// 50% number modifications
-	
+	$mutation->setFrecuency('MODIFY_NUMBERS',500);	// 50% number modifications
+	$mutation->setFrecuency('MODIFY_QUOTED_STRINGS',100);	// 50% number modifications
 
 	// Count time spend in mutation	
 	$time_start = microtime(true);
