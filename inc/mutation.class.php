@@ -86,15 +86,16 @@ class Mutation{
 		
 		// Valid flag check
 		if( !in_array($flag,$accepted_flags)){
-			echo "Function setFrecuency, Fatal error: Unknown flag: '$flag'\n";
-			echo "Exitting...\n";
+			echo "<pre>Function setFrecuency, Fatal error: Unknown flag: '$flag'\n";
+			echo "Allowed flags: ".implode(',',$accepted_flags)."\n";
+			echo "Exitting...\n</pre>";
 			exit();			
 		}
 		
 		// Valid value check
-		if( $value != ceil($value) || $value<(-1) || $value>1001 ){
-			echo "Function setFrecuency, Fatal error: '$value' is not a valid value\n";
-			echo "Exitting...\n";
+		if( $value != ceil($value) || $value<(-1) || $value>1001 || !is_numeric($value) ){
+			echo "<pre>Function setFrecuency, Fatal error: '$value' is not a valid value for flag '$flag'\n";
+			echo "Exitting...\n</pre>";
 			exit();			
 		}
 		
@@ -102,6 +103,36 @@ class Mutation{
 		$this->flags[$flag] = $value;
 		
 	}
+	
+	/*-----------------------------------------------------
+	| Function FrecuencyCheck($flag)
+	|
+	| Returns true or false based on a random dice
+	| and frecuencys set by function SetFrecuency
+	------------------------------------------------------*/	
+	function frecuencyCheck( $flag ){
+
+		$accepted_flags=array('MODIFY_VARS','MODIFY_QUOTED_STRINGS',
+		'MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS');
+		
+		// Valid flag check
+		if( !in_array($flag,$accepted_flags)){
+			echo "<pre>Function FrecuencyCheck, Fatal error: Unknown flag: '$flag'\n";
+			echo "Allowed flags: ".implode(',',$accepted_flags)."\n";
+			echo "Exitting...\n</pre>";
+			exit();			
+		}
+		
+		// Random decision
+		$dice=rand(0,1000);
+		if( $dice < $this->flags[$flag] ){
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
 	
 	/*-----------------------------------------------------
 	| Function readBackToCharacter($stop_character,[$position])
@@ -184,7 +215,7 @@ class Mutation{
 	|
 	| Generate a Random String with a random number of
 	| characters between $min_length and $max_length
-	------------------------------------------------------*/		ś
+	------------------------------------------------------*/		
 	function randomString($min_length,$max_length){
 		
 		$characters='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -198,7 +229,7 @@ class Mutation{
 		return $string;
 		
 	}
-+´´´´´´´´´´´´´´´´´´´´´´´´´
+
 	/*-----------------------------------------------------
 	| function getNewVarName
 	|
@@ -374,9 +405,13 @@ class Mutation{
 						$this->status['number'].=$this->status['character'];
 					}elseif(!$is_number && $this->status['in_number']){
 						
-						// Posible Mutation HERE !! !!! !!
-						// Number conversion!
-						$this->backReplace($this->status['number'],$this->numberModify($this->status['number']));
+						/* Posible Mutation HERE !! !!! !!
+						   Number conversion! */
+						   
+						if( $this->frecuencyCheck('MODIFY_NUMBERS') ){
+							$this->backReplace($this->status['number'],$this->numberModify($this->status['number']));
+						}
+						
 						$this->status['number']='';
 						$this->status['in_number'] = false;
 					}
@@ -386,8 +421,8 @@ class Mutation{
 				
 				if( $this->status[in_quotes] &&  $this->status[character] != "'" ){
 			
-					// Posible Mutation HERE !! !!! !!!
-					// 'quoted' literals conversion!
+					/* Posible Mutation HERE !! !!! !!!
+				 	  'quoted' literals conversion! 			*/
 
 					if( rand(0,6) == 0 ){ $nl="\n"; }else{ $nl=''; }
 					switch(rand(0,1)){

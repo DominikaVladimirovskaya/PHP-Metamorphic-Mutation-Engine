@@ -19,6 +19,10 @@
 	// Create a random new mutation.
 	$mutation = new Mutation();
 	$mutation->setCode( file_get_contents('./mutation_chamber/test_file.php') );
+
+
+	// Flags
+	$mutation->setFrecuency('MODIFY_NUMBERS',"500");	// 50% number modifications
 	
 
 	// Count time spend in mutation	
