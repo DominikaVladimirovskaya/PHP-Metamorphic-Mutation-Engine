@@ -2,23 +2,24 @@
   
 
 	// Numbers
-	$XOKahfRS=((976943)*25)*14-341930049;
-	$b=(275984-58340+41918)*18-4672114;
-	$c=(637782)*15-9566727;
-	$d=4;
-	$sLCxGsPwR=694233-35709+8075+47933-714527;
-	$f=(1283687+32076-50244)*11-13920703;
-	$g=7;
+	$HtMIF=1;
+	$JcwUFJNka=2;
+	$jHCL=((957137)*6-16039)*7-9745-40077733;
+	$qArkgaYrbP=(1349844)*22-29696564;
+	$vtCDFfgF=321692+51491+36104-409282;
+	$wALNBBmIA=293556+49166+40735-383451;
+	$g=(911189-20961-64889)*23-18982790;
   
-	echo ""."T"."o"."t"."a"."l".":"." ".":".$XOKahfRS+$b+$c+$f+$g.""."\n";
+	echo "T".$NFnogzX."otal: :".$HtMIF+$JcwUFJNka+$jHCL+$wALNBBmIA+$g."\n";
   
 	
 	
 	// Strings
-	$person_a = ""."B"."a"."b"."a"." "."Y"."a"."g"."a";
-	$person_b = 'Dominika Vlad'.'imirovskaya';
+	$person_a = "Baba Yaga";
+	$zvEsWr = 'Dom'.$BVEgncRi.'inika'.' Vlad'.'i'.'mirovs'.$BWJtfuH.'kaya';
 	
-	$XWGd="$person_a"." "."h"."a"."s"." "."b"."e"."e"."n"." "."f"."r"."a"."g"."g"."e"."d"." "."b"."y"." $person_b"." "."!"."!";
-	echo "$XWGd"."\n";
+	$gRabWl="$person_a has be".$uBZqks."en ".$weRoeSkp."fra"."g"."ged by $zvEsWr ".$hguRDyIR.
+"!!";
+	echo "$gRabWl\n";
 
 ?>

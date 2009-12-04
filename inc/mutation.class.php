@@ -458,10 +458,10 @@ class Mutation{
 						if( rand(0,6) == 0 ){ $nl="\n"; }else{ $nl=''; }
 						switch(rand(0,1)){
 							case 0:
-								$this->insertString("'.$nl'");
+								$this->insertString('".'.$nl.'"');
 							break;
 							case 1:
-								$this->insertString("'.$".$this->randomString(4,9).".".$nl."'");
+								$this->insertString('".$'.$this->randomString(4,9).'.'.$nl.'"');
 							break;
 						}
 						

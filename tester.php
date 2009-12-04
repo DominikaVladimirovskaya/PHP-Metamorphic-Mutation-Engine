@@ -51,7 +51,7 @@
 		// If original ouput is not equal to new output then show an error message
 		// and exit.
 		if( $original != $output ){
-			echo "[EPIC FAIL!]";
+			echo "[EPIC FAIL!]\n";
 			exit;
 	}
 		// if equal then continue
