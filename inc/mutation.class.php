@@ -454,8 +454,20 @@ class Mutation{
 					| 	Posible Mutation HERE !! !!! !!!
 				 	| 	"double quoted" literals conversion!
 				 	*/
-				 	
-					$this->insertString('".'.'"');
+				 	if( $this->frecuencyCheck('MODIFY_DOUBLE_QUOTED_STRINGS') ){
+						if( rand(0,6) == 0 ){ $nl="\n"; }else{ $nl=''; }
+						switch(rand(0,1)){
+							case 0:
+								$this->insertString("'.$nl'");
+							break;
+							case 1:
+								$this->insertString("'.$".$this->randomString(4,9).".".$nl."'");
+							break;
+						}
+						
+					}				 	
+					
+					/* mutation end */
 					
 				}
 				
