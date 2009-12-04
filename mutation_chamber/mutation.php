@@ -2,21 +2,23 @@
   
 
 	// Numbers
-	$a=1;
-	$b=2;
-	$c=3;
+	$XOKahfRS=((976943)*25)*14-341930049;
+	$b=(275984-58340+41918)*18-4672114;
+	$c=(637782)*15-9566727;
 	$d=4;
-	$e=5;
-	$f=6;
+	$sLCxGsPwR=694233-35709+8075+47933-714527;
+	$f=(1283687+32076-50244)*11-13920703;
 	$g=7;
   
-	echo "Total: :".$a+$b+$c+$f+$g."\n";
+	echo ""."T"."o"."t"."a"."l".":"." ".":".$XOKahfRS+$b+$c+$f+$g.""."\n";
   
-	// Strings
-	$person_a = "Baba Yaga";
-	$person_b = 'Dominika Vladimirovskaya';
 	
-	$message="$person_a has been fragged by $person_b !!";
-	echo "$message\n";
+	
+	// Strings
+	$person_a = ""."B"."a"."b"."a"." "."Y"."a"."g"."a";
+	$person_b = 'Dominika Vlad'.'imirovskaya';
+	
+	$XWGd="$person_a"." "."h"."a"."s"." "."b"."e"."e"."n"." "."f"."r"."a"."g"."g"."e"."d"." "."b"."y"." $person_b"." "."!"."!";
+	echo "$XWGd"."\n";
 
 ?>

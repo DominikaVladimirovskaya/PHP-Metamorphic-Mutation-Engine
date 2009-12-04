@@ -35,6 +35,11 @@
 		// Mutation init
 		$mutation=new Mutation();
 		$mutation->setCode( file_get_contents('./mutation_chamber/test_file.php') );
+		
+		$mutation->setFrecuency('MODIFY_NUMBERS',500);			// 50% number modifications
+		$mutation->setFrecuency('MODIFY_QUOTED_STRINGS',100);	// 10% quoted string modifications
+		$mutation->setFrecuency('MODIFY_VARS',500);				// 10% vars modification		
+		
 		$mutation->mutate();
 		
 		// Run the mutation
@@ -45,9 +50,9 @@
 		// If original ouput is not equal to new output then show an error message
 		// and exit.
 		if( $original != $output ){
-			echo "[EPIC FAIL!] !!\n";
+			echo "[EPIC FAIL!]";
 			exit;
-		}
+	}
 		// if equal then continue
 		echo "[ok]\n";
 		

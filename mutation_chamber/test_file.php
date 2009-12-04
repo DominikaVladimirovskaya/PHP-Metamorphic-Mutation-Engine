@@ -12,6 +12,8 @@
   
 	echo "Total: :".$a+$b+$c+$f+$g."\n";
   
+	
+	
 	// Strings
 	$person_a = "Baba Yaga";
 	$person_b = 'Dominika Vladimirovskaya';

@@ -1,13 +1,13 @@
 <?php
-/*************************************************************
-
-	PHP Mutation Engine
-	
-	By Dominika Vladimirovskaya
-	dominika.vladimirov(At)comentalo.net
-	October // 2009 // Soviet Union
-	
-**************************************************************/
+/*------------------------------------------------------------
+|
+|	PHP Mutation Engine
+|	
+|	By Dominika Vladimirovskaya
+|	dominika.vladimirov(At)comentalo.net
+|	October // 2009 // Soviet Union
+|	
+--------------------------------------------------------------*/
 
 class Mutation{
 	
@@ -20,7 +20,7 @@ class Mutation{
 	/* Constructor */	
 	function Mutation(){
    
-		// Php parser status init
+		// Php parser 
 		$this->status['in_php'] 			= false;
 		$this->status['in_var'] 			= false;
 		$this->status['in_comment_line']	= false;
@@ -32,12 +32,10 @@ class Mutation{
 		$this->status['in_comment']			= false;
 		$this->status['in_number']			= false;
 		$this->status['character']			= '';
-	
-		// Php parser configuration
-		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ','*','/','-','+','%','&','=','{','}','-','\\','<','>',';','.');
-		
-		// Php related stuff
+
+		// Php related
 		$this->php['reserved_vars']	= array('this','_get','vars','_post','_request','cookies','server','globals');
+		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ','*','/','-','+','%','&','=','{','}','-','\\','<','>',';','.');
 
 	}
 
@@ -411,8 +409,8 @@ class Mutation{
 					}elseif(!$is_number && $this->status['in_number']){
 						
 						/*
-						| Posible Mutation HERE !! !!! !!
-						| Number conversion!
+						| 	Posible Mutation HERE !! !!! !!
+						| 	Number conversion!
 						*/
 						   
 						if( $this->frecuencyCheck('MODIFY_NUMBERS') ){
@@ -421,16 +419,16 @@ class Mutation{
 						
 						$this->status['number']='';
 						$this->status['in_number'] = false;
+						/* mutation end */
 					}
 				}
 
-				// Modify simple quoted strings 'like this one'
-				
+				// Detect simple quoted strings 'like this one'
 				if( $this->status[in_quotes] &&  $this->status[character] != "'" ){
 			
 					/*
-					| Posible Mutation HERE !! !!! !!!
-				 	| 'quoted' literals conversion!
+					| 	Posible Mutation HERE !! !!! !!!
+				 	| 	'quoted' literals conversion!
 				 	*/
 
 					if( $this->frecuencyCheck('MODIFY_QUOTED_STRINGS') ){
@@ -443,9 +441,25 @@ class Mutation{
 								$this->insertString("'.$".$this->randomString(4,9).".".$nl."'");
 							break;
 						}
+						
 					}
+					/* mutation end */
+				}
+				
+				
+				// Detect double quoted strings "like this"
+				if( $this->status[in_double_quotes] &&  $this->status[character] != '"' && $this->status['in_var'] == false ){
+				
+					/*
+					| 	Posible Mutation HERE !! !!! !!!
+				 	| 	"double quoted" literals conversion!
+				 	*/
+				 	
+					$this->insertString('".'.'"');
 					
 				}
+				
+				
 			}
 		}
 
