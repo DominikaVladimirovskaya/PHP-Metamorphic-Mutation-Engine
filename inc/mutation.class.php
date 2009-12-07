@@ -35,8 +35,8 @@ class Mutation{
 
 		// Php related
 		$this->php['reserved_vars']	= array('this','_get','vars','_post','_request','cookies','server','globals');
-		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ','*','/','-','+','%','&','=','{','}','-','\\','<','>',';','.');
-
+		$this->php['word_separators']	= array("\n","\t",'"',"'",'(',')',' ','*','/','-','+','%','&','=','{','}','-','\\','<','>',';','.',',');
+		$this->php['php_functions'] = array_shift(get_defined_functions());
 	}
 
 	/*-----------------------------------------------------
@@ -79,7 +79,7 @@ class Mutation{
 	
 	function setFrecuency($flag, $value){
 		$accepted_flags=array('MODIFY_VARS','MODIFY_QUOTED_STRINGS',
-		'MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS');
+		'MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS','MODIFY_FUNCTIONS');
 		
 		// Valid flag check
 		if( !in_array($flag,$accepted_flags)){
@@ -110,7 +110,7 @@ class Mutation{
 	function frecuencyCheck( $flag ){
 
 		$accepted_flags=array('MODIFY_VARS','MODIFY_QUOTED_STRINGS',
-		'MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS');
+		'MODIFY_DOUBLE_QUOTED_STRINGS','MODIFY_NUMBERS','MODIFY_FUNCTIONS');
 		
 		// Valid flag check
 		if( !in_array($flag,$accepted_flags)){
@@ -337,6 +337,14 @@ class Mutation{
 		// inside PHP code
 		if( $this->status['in_php'] == true  ){
   
+			// Words stack
+			if( $word_separator ){
+				$words[] = $this->status['word'];
+				$this->status['word'] = '';
+			}else{
+				$this->status['word'] .= $this->status['character'];  	
+			}
+			
 			// CONDITIONS IF NOT SLASHED CHAR
 			// This block executed only if the character
 			// at cursor position is NOT \slashed
@@ -499,6 +507,12 @@ class Mutation{
 		}
 		return $n;
 	}
+	
+	// Test method
+	function test(){
+		d($this->php['php_functions']);
+	}
+	
 	
 }
 

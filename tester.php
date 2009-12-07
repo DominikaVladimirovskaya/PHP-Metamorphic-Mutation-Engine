@@ -22,15 +22,21 @@
 	// Engine load
 	require './inc/mutation.class.php';
 	
-	// Run the script and get the ouput
+	// Run the original test script and get the ouput
 	system("php ./mutation_chamber/test_file.php > ./mutation_chamber/original.txt");
 	$original=implode('',file('./mutation_chamber/original.txt'));
 	
-	// Infinite loop    
+	
+	
+	// Endless loop   
 	while(true){
-		
+
+		printf ( "\x1b[2J" );	// Ansi codes, clear screen
+		printf ( "\x1b[H" );	// Ansi codes, cursor at home
+
 		$aux++;
-		echo "Mutation: $aux ...................................";
+		
+		echo "Mutation: $aux";
 		
 		// Mutation init
 		$mutation=new Mutation();
@@ -38,7 +44,7 @@
 		
 		$mutation->setFrecuency('MODIFY_NUMBERS',500);				// 50% number modifications
 		$mutation->setFrecuency('MODIFY_QUOTED_STRINGS',100);		// 10% quoted string modifications
-		$mutation->setFrecuency('MODIFY_DOUBLE_QUOTED_STRINGS',100);// 10% quoted string modifications
+		$mutation->setFrecuency('MODIFY_DOUBLE_QUOTED_STRINGS',100);// 10% double quoted string modifications
 		$mutation->setFrecuency('MODIFY_VARS',500);					// 10% vars modification		
 		
 		$mutation->mutate();
@@ -51,11 +57,12 @@
 		// If original ouput is not equal to new output then show an error message
 		// and exit.
 		if( $original != $output ){
-			echo "[EPIC FAIL!]\n";
+			echo "\n[EPIC FAIL!]\n";
 			exit;
 	}
 		// if equal then continue
-		echo "[ok]\n";
+		
+		 
 		
 	}
 

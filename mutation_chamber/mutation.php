@@ -1,25 +1,39 @@
 <?php
-  
+
+// Test script
+
+
+	function addition($QUrpWkEkmx,$b){
+	
+		return $QUrpWkEkmx+$b;
+	
+	}
+
 
 	// Numbers
-	$HtMIF=1;
-	$JcwUFJNka=2;
-	$jHCL=((957137)*6-16039)*7-9745-40077733;
-	$qArkgaYrbP=(1349844)*22-29696564;
-	$vtCDFfgF=321692+51491+36104-409282;
-	$wALNBBmIA=293556+49166+40735-383451;
-	$g=(911189-20961-64889)*23-18982790;
+	$QUrpWkEkmx=(193866+7476)*7+58236-1467629;
+	$b=2;
+	$wdbqT=933362-23272+64318-974405;
+	$d=4;
+	$e=426812-26257-400550;
+	$CApOuGK=6;
+	$g=((1208033)*11-47287-45316)*6-79174553;
   
-	echo "T".$NFnogzX."otal: :".$HtMIF+$JcwUFJNka+$jHCL+$wALNBBmIA+$g."\n";
+	echo "Total: :".$QUrpWkEkmx+$b+$wdbqT+$CApOuGK+$g."\n";
   
 	
 	
 	// Strings
-	$person_a = "Baba Yaga";
-	$zvEsWr = 'Dom'.$BVEgncRi.'inika'.' Vlad'.'i'.'mirovs'.$BWJtfuH.'kaya';
+	$xRidBWWIO = "Baba Yaga";
+	$person_b = 'Dominika Vladimirovs'.$PLuGUJx.'kaya';
 	
-	$gRabWl="$person_a has be".$uBZqks."en ".$weRoeSkp."fra"."g"."ged by $zvEsWr ".$hguRDyIR.
-"!!";
-	echo "$gRabWl\n";
+	$message="$xRidBWWIO"." has been fra".$tvFOcAxzN."gged by $person_b ".$Uszglz."!!";
+	
+	echo "$message\n";
 
+	// Simple function call
+	
+	$yAGn= addition( 25, 78110+58633-20661-36599-79438 );
+	echo "25+45=$yAGn\n";
+	
 ?>
